@@ -2,21 +2,33 @@ require("dotenv").config();
 const { chromium } = require("playwright");
 const cron = require("node-cron");
 
+const { sendMail } = require("./mail-config");
+
 async function doMyAttendance(login = false) {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto("http://hfn.greythr.com/");
+  await page.goto(process.env.COMPANY_DOMAIN);
   /* Insert username and password */
-  await page.fill("#username", process.env.USERNAME);
+  await page.fill("#username", process.env.EMAIL);
   await page.fill("#password", process.env.PASSWORD);
   await page.click("button");
 
   if (login) {
     await page.click("text=Sign In");
-    await browser.close();
+    setTimeout(async () => {
+      const proofImg = await page.screenshot();
+      const buffer = proofImg.toString("base64");
+      await sendMail(buffer);
+      await browser.close();
+    }, 15000);
   } else {
     await page.click("text=Sign Out");
-    await browser.close();
+    setTimeout(async () => {
+      const proofImg = await page.screenshot();
+      const buffer = proofImg.toString("base64");
+      await sendMail(buffer);
+      await browser.close();
+    }, 15000);
   }
 }
 

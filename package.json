@@ -15,6 +15,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "node-cron": "^3.0.0",
+    "nodemailer": "^6.6.3",
     "playwright": "^1.14.0"
   }
 }

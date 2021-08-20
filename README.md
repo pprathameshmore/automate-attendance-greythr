@@ -1,2 +1,3 @@
-# automate-attendance-greythr
- 
+# Automate your attendance on Greythr
+
+
